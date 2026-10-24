@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -162,7 +163,7 @@ public class YarikAsasi extends Item {
         double z0 = d.contains("yarik_z") ? d.getDouble("yarik_z") : sp.getZ();
         long seed = d.contains("yarik_seed") ? d.getLong("yarik_seed") : 12345L;
         double cx = x0, cy = y0 + MERKEZ_YUKSEKLIK, cz = z0;
-        Random rnd = level.random;
+        RandomSource rnd = level.random;
 
         // ---- 1) Şarj: yerden yükselen parçacıklar
         if (t < 60 && t % 2 == 0) {
@@ -304,6 +305,7 @@ public class YarikAsasi extends Item {
                 hedef.playSound(null, sp.blockPosition(), SoundEvents.PORTAL_TRAVEL, SoundSource.PLAYERS, 1f, 1f);
                 hedef.playSound(null, sp.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1f, 0.6f);
                 hedef.sendParticles(ParticleTypes.END_ROD, sp.getX(), sp.getY() + 1, sp.getZ(), 60, 0.8, 1.2, 0.8, 0.15);
+                hedef.sendParticles(ParticleTypes.FLASH, sp.getX(), sp.getY() + 1.5, sp.getZ(), 3, 0.2, 0.2, 0.2, 0.0);
                 if (!cennetteydi)
                     sp.sendSystemMessage(Component.literal("Cennet Karanlığı seni içine aldı.").withStyle(ChatFormatting.DARK_PURPLE));
             }

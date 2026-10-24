@@ -41,5 +41,4 @@ tasks.named('processResources', ProcessResources).configure {
 
 tasks.named('jar', Jar).configure {
     manifest.attributes(['Implementation-Title': 'cennetmod', 'Implementation-Version': project.version])
-    finalizedBy 'reobfJar'
 }

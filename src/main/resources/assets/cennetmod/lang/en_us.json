@@ -1,1 +1,7 @@
-{"item.cennetmod.yarik_asasi":"Rift Staff"}
+{
+  "item.cennetmod.yarik_asasi": "Rift Staff",
+  "item.cennetmod.yildiz_kristali": "Star Crystal",
+  "block.cennetmod.karanlik_govde": "Dark Log",
+  "block.cennetmod.karanlik_yaprak": "Dark Leaves",
+  "block.cennetmod.ay_cevheri": "Moon Ore"
+}

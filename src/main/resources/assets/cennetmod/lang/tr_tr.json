@@ -1,1 +1,7 @@
-{"item.cennetmod.yarik_asasi":"Yarık Asası"}
+{
+  "item.cennetmod.yarik_asasi": "Yarık Asası",
+  "item.cennetmod.yildiz_kristali": "Yıldız Kristali",
+  "block.cennetmod.karanlik_govde": "Karanlık Gövde",
+  "block.cennetmod.karanlik_yaprak": "Karanlık Yaprak",
+  "block.cennetmod.ay_cevheri": "Ay Cevheri"
+}

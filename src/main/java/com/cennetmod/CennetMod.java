@@ -1,10 +1,11 @@
 package com.cennetmod;
 
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -25,15 +27,15 @@ public class CennetMod {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
 
     // Eşyalar
     public static final RegistryObject<Item> YARIK_ASASI = ITEMS.register("yarik_asasi",
             () -> new YarikAsasi(new Item.Properties().durability(64).stacksTo(1)));
     public static final RegistryObject<Item> YILDIZ_KRISTALI = ITEMS.register("yildiz_kristali",
             () -> new Item(new Item.Properties()));
-
-    public static final RegistryObject<Item> NUR_KARTI = ITEMS.register("nur_kapisi_kimlik_karti",
-            () -> new NurKarti(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> CENNET_KARTI = ITEMS.register("cennet_karti",
+            () -> new CennetKarti(new Item.Properties().stacksTo(1)));
 
     // Bloklar
     public static final RegistryObject<Block> KARANLIK_GOVDE = BLOCKS.register("karanlik_govde",
@@ -51,16 +53,30 @@ public class CennetMod {
     public static final RegistryObject<Item> AY_CEVHERI_ITEM = ITEMS.register("ay_cevheri",
             () -> new BlockItem(AY_CEVHERI.get(), new Item.Properties()));
 
+    // Varlıklar
+    public static final RegistryObject<EntityType<AngelSoldier>> MELEK = ENTITIES.register("melek_asker",
+            () -> EntityType.Builder.<AngelSoldier>of(AngelSoldier::new, MobCategory.MISC)
+                    .sized(1.8f, 6.0f).clientTrackingRange(10).build("melek_asker"));
+
     @SuppressWarnings("removal")
     public CennetMod() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         BLOCKS.register(bus);
         ITEMS.register(bus);
+        ENTITIES.register(bus);
         bus.addListener(this::tabIcerigi);
+        bus.addListener(this::nitelikler);
+    }
+
+    private void nitelikler(EntityAttributeCreationEvent e) {
+        e.put(MELEK.get(), AngelSoldier.nitelikler().build());
     }
 
     private void tabIcerigi(BuildCreativeModeTabContentsEvent e) {
-        if (e.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) { e.accept(YARIK_ASASI); e.accept(NUR_KARTI); }
+        if (e.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            e.accept(YARIK_ASASI);
+            e.accept(CENNET_KARTI);
+        }
         if (e.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             e.accept(KARANLIK_GOVDE_ITEM);
             e.accept(KARANLIK_YAPRAK_ITEM);

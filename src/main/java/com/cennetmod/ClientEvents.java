@@ -25,7 +25,7 @@ public class ClientEvents {
         LocalPlayer p = mc.player;
         if (p == null || basarisiz) return;
 
-        float hedef = NurSistemi.cennetBoyutu(p.level()) ? 0.55f : 0f;
+        float hedef = p.level().dimension().equals(YarikAsasi.CENNET) ? 0.55f : 0f;
         int t = ticks();
         if (t >= 60) {
             float k = Math.min(1f, (t - 60) / (YarikAsasi.SURE - 80f));

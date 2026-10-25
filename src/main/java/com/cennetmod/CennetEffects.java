@@ -39,7 +39,7 @@ public class CennetEffects extends DimensionSpecialEffects {
     }
 
     @Override
-    public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix,
+    public boolean renderSky(ClientLevel level, int ticks, float partialTick, PoseStack poseStack,
                              Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
         setupFog.run();
         RenderSystem.enableBlend();
@@ -47,8 +47,8 @@ public class CennetEffects extends DimensionSpecialEffects {
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 
-        PoseStack ps = new PoseStack();
-        ps.mulPose(modelViewMatrix);
+        PoseStack ps = poseStack;
+        ps.pushPose();
         ps.mulPose(Axis.XP.rotationDegrees(25f));
         ps.mulPose(Axis.YP.rotationDegrees((ticks + partialTick) * 0.012f)); // çok yavaş süzülme
 
@@ -73,6 +73,7 @@ public class CennetEffects extends DimensionSpecialEffects {
             BufferUploader.drawWithShader(bb.buildOrThrow());
             ps.popPose();
         }
+        ps.popPose();
         RenderSystem.depthMask(true);
         RenderSystem.disableBlend();
         return true;

@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
-/** Cennet Karanlığı'nın gökyüzü: yıldızlı, mor-pembe-turkuaz bir bulutsu (6 yüzlü gökyüzü küpü). */
+/** Cennet Karanligi'nin gokyuzu: yildizli bulutsu (6 yuzlu gokyuzu kupu). */
 public class CennetEffects extends DimensionSpecialEffects {
     private static final ResourceLocation[] YUZ = new ResourceLocation[6];
     static {
@@ -39,7 +39,7 @@ public class CennetEffects extends DimensionSpecialEffects {
     }
 
     @Override
-    public boolean renderSky(ClientLevel level, int ticks, float partialTick, PoseStack poseStack,
+    public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix,
                              Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
         setupFog.run();
         RenderSystem.enableBlend();
@@ -47,10 +47,11 @@ public class CennetEffects extends DimensionSpecialEffects {
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 
-        PoseStack ps = new PoseStack(); ps.mulPose(modelViewMatrix);
+        PoseStack ps = new PoseStack();
+        ps.mulPose(modelViewMatrix);
         ps.pushPose();
         ps.mulPose(Axis.XP.rotationDegrees(25f));
-        ps.mulPose(Axis.YP.rotationDegrees((ticks + partialTick) * 0.012f)); // çok yavaş süzülme
+        ps.mulPose(Axis.YP.rotationDegrees((ticks + partialTick) * 0.012f));
 
         Tesselator tess = Tesselator.getInstance();
         for (int i = 0; i < 6; i++) {

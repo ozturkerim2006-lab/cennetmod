@@ -4,6 +4,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
@@ -31,6 +32,9 @@ public class CennetMod {
     public static final RegistryObject<Item> YILDIZ_KRISTALI = ITEMS.register("yildiz_kristali",
             () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> NUR_KARTI = ITEMS.register("nur_kapisi_kimlik_karti",
+            () -> new NurKarti(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+
     // Bloklar
     public static final RegistryObject<Block> KARANLIK_GOVDE = BLOCKS.register("karanlik_govde",
             () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)));
@@ -56,7 +60,7 @@ public class CennetMod {
     }
 
     private void tabIcerigi(BuildCreativeModeTabContentsEvent e) {
-        if (e.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) e.accept(YARIK_ASASI);
+        if (e.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) { e.accept(YARIK_ASASI); e.accept(NUR_KARTI); }
         if (e.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             e.accept(KARANLIK_GOVDE_ITEM);
             e.accept(KARANLIK_YAPRAK_ITEM);

@@ -70,7 +70,7 @@ public class YarikAsasi extends Item {
         ItemStack stack = player.getItemInHand(hand);
         if (player.getCooldowns().isOnCooldown(this)) return InteractionResultHolder.fail(stack);
 
-        boolean cennette = level.dimension().equals(CENNET);
+        boolean cennette = NurSistemi.cennetBoyutu(level);
         if (!cennette && !geceYarisi(level)) {
             if (!level.isClientSide) {
                 player.sendSystemMessage(Component.literal("Yıldızlar sessiz...").withStyle(ChatFormatting.GRAY));
@@ -292,7 +292,7 @@ public class YarikAsasi extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (!level.isClientSide && entity instanceof ServerPlayer sp) {
             temizle((ServerLevel) level, sp);
-            boolean cennetteydi = level.dimension().equals(CENNET);
+            boolean cennetteydi = NurSistemi.cennetBoyutu(level);
             ServerLevel hedef = sp.server.getLevel(cennetteydi ? Level.OVERWORLD : CENNET);
             if (hedef != null) {
                 BlockPos baz = cennetteydi ? hedef.getSharedSpawnPos() : BlockPos.ZERO;

@@ -47,7 +47,7 @@ public class CennetEffects extends DimensionSpecialEffects {
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 
-        PoseStack ps = poseStack;
+        PoseStack ps = new PoseStack(); ps.mulPose(modelViewMatrix);
         ps.pushPose();
         ps.mulPose(Axis.XP.rotationDegrees(25f));
         ps.mulPose(Axis.YP.rotationDegrees((ticks + partialTick) * 0.012f)); // çok yavaş süzülme

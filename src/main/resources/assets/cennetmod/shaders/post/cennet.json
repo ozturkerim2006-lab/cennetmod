@@ -1,7 +1,0 @@
-{
-  "targets": ["swap"],
-  "passes": [
-    { "name": "cennetmod:cennet_ton", "intarget": "minecraft:main", "outtarget": "swap" },
-    { "name": "minecraft:blit", "intarget": "swap", "outtarget": "minecraft:main" }
-  ]
-}

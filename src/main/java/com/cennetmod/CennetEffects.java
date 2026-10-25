@@ -16,7 +16,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
-/** Cennet Karanlığı'nın gökyüzü: yıldızlı, mor-pembe-turkuaz bir bulutsu (6 yüzlü gökyüzü küpü). */
+/**
+ * Cennet Karanligi'nin gokyuzu: mor-pembe yildizli bulutsu (6 yuzlu gokyuzu kupu).
+ *
+ * renderSky icin Forge surumlerinde farkli imzalar var. Hangisi kullanilirsa kullanilsin
+ * derlensin diye uc imza da @Override OLMADAN yazildi; Forge hangisini cagiriyorsa o calisir.
+ */
 public class CennetEffects extends DimensionSpecialEffects {
     private static final ResourceLocation[] YUZ = new ResourceLocation[6];
     static {
@@ -38,19 +43,39 @@ public class CennetEffects extends DimensionSpecialEffects {
         return false;
     }
 
-    @Override
+    // Imza A: eski surumler (PoseStack veren)
     public boolean renderSky(ClientLevel level, int ticks, float partialTick, PoseStack poseStack,
                              Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
+        return gokyuzuCiz(poseStack, ticks, partialTick, setupFog);
+    }
+
+    // Imza B: 1.21 (modelview Matrix4f veren)
+    public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix,
+                             Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
+        PoseStack ps = new PoseStack();
+        ps.mulPose(modelViewMatrix);
+        return gokyuzuCiz(ps, ticks, partialTick, setupFog);
+    }
+
+    // Imza C: matris vermeyen surum; kamera donusunden kendimiz kurariz
+    public boolean renderSky(ClientLevel level, int ticks, float partialTick,
+                             Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
+        PoseStack ps = new PoseStack();
+        ps.mulPose(Axis.XP.rotationDegrees(camera.getXRot()));
+        ps.mulPose(Axis.YP.rotationDegrees(camera.getYRot() + 180f));
+        return gokyuzuCiz(ps, ticks, partialTick, setupFog);
+    }
+
+    private boolean gokyuzuCiz(PoseStack ps, int ticks, float partialTick, Runnable setupFog) {
         setupFog.run();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.depthMask(false);
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 
-        PoseStack ps = poseStack;
         ps.pushPose();
         ps.mulPose(Axis.XP.rotationDegrees(25f));
-        ps.mulPose(Axis.YP.rotationDegrees((ticks + partialTick) * 0.012f)); // çok yavaş süzülme
+        ps.mulPose(Axis.YP.rotationDegrees((ticks + partialTick) * 0.012f)); // cok yavas suzulme
 
         Tesselator tess = Tesselator.getInstance();
         for (int i = 0; i < 6; i++) {
@@ -66,10 +91,10 @@ public class CennetEffects extends DimensionSpecialEffects {
             Matrix4f m = ps.last().pose();
             RenderSystem.setShaderTexture(0, YUZ[i]);
             BufferBuilder bb = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-            bb.addVertex(m, -100f, -100f, -100f).setUv(0f, 0f).setColor(215, 215, 215, 255);
-            bb.addVertex(m, -100f, -100f, 100f).setUv(0f, 1f).setColor(215, 215, 215, 255);
-            bb.addVertex(m, 100f, -100f, 100f).setUv(1f, 1f).setColor(215, 215, 215, 255);
-            bb.addVertex(m, 100f, -100f, -100f).setUv(1f, 0f).setColor(215, 215, 215, 255);
+            bb.addVertex(m, -100f, -100f, -100f).setUv(0f, 0f).setColor(255, 255, 255, 255);
+            bb.addVertex(m, -100f, -100f, 100f).setUv(0f, 1f).setColor(255, 255, 255, 255);
+            bb.addVertex(m, 100f, -100f, 100f).setUv(1f, 1f).setColor(255, 255, 255, 255);
+            bb.addVertex(m, 100f, -100f, -100f).setUv(1f, 0f).setColor(255, 255, 255, 255);
             BufferUploader.drawWithShader(bb.buildOrThrow());
             ps.popPose();
         }

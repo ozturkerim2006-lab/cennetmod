@@ -5,6 +5,6 @@
   "respawn_anchor_works": false, "has_raids": false,
   "logical_height": 384, "min_y": -64, "height": 384,
   "infiniburn": "#minecraft:infiniburn_overworld",
-  "effects": "minecraft:overworld",
+  "effects": "cennetmod:cennet",
   "monster_spawn_light_level": 7, "monster_spawn_block_light_limit": 0
 }

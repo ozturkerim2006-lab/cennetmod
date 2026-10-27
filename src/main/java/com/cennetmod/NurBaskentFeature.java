@@ -10,20 +10,36 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
- * Nur Başkenti: düz bulut ovasının üstüne kodla üretilen şehir.
+ * NUR BAŞKENTİ — "İklîm-i Cennet" (Efsanevi tasarım)
  *
- * Her parça (chunk) kendi sütunlarını çizer; yapılar koordinatların bir fonksiyonudur, bu yüzden
- * chunk sınırlarında kusursuz birleşir. Merkez (0,0). Yer: ZEMIN (üst bulut bloğunun Y'si).
+ * Efsaneye göre şehir, bulut denizinin üstünde yedi katlı bir nurlu âlemdir; merkezinde Arş-ı Nur
+ * (Nur Tahtı) yükselir, etrafında sekiz Cennet Kapısı vardır (bkz. eş-Şura 7: "Cennet kapıları").
  *
- * Düzen: ortada katedral + meydan, dört cadde, halka kanal/yol, içte gökdelen semti, dışta bahçeli köy evleri,
- * çevrede sur, güneyde (Z+) ana kapı. Şehrin dışı yumuşak bulut tepeleri.
+ * Düzen (merkez 0,0; yer: ZEMIN):
+ *   1. Arş-ı Nur Meydanı (r<=56): sekiz köşeli yıldız mozaiği, altın hatlar.
+ *   2. Sidre Parkı (56-64): kutsal ağaçlar; dört yönde Melek Heykelleri (kanatlı nur abideleri).
+ *   3. Kevser Halka Kanalı (64-68) + köprüler.
+ *   4. Hatime Yolu (70-78): halka cadde, fener dizili.
+ *   5. Rayhan Bahçeleri (78-88): çiçekli bahçe kuşağı.
+ *   6. İç Semt (88-176): minareli gökdelenler (köşe kuleleri, piramit çatılar, nur mızrakları).
+ *      Dış Semt (176-268): bahçeli köy evleri; arada parklar.
+ *   7. Sur (286-290): sekiz kapılı sur halkası, kuleli; güneyde (Z+) büyük Nur Kapısı (cam mühürlü).
+ *
+ * Dışarıda yumuşak bulut tepeleri ve nadiren "sabit yıldız" yüzen bulut adacıkları.
+ * Her parça (chunk) kendi sütunlarını çizer; tümü koordinatın saf fonksiyonudur — chunk
+ * sınırlarında kusursuz birleşir.
  */
 public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
     public static final int ZEMIN = 100;
     private static final int G = ZEMIN + 1;      // zeminin üstündeki ilk hava bloğu
-    private static final int KAPI = 288;         // güney kapının merkeze uzaklığı (Z+)
+    private static final int KAPI = 288;         // güney büyük kapının merkeze uzaklığı (Z+)
     private static final int MAXH = 64;
     private static final int SEHIR_R = 350;
+
+    /** Kapı merkezleri (8 yön): sur halkasındaki sekiz Cennet Kapısı. */
+    private static final int[][] KAPILAR = {
+            {288, 0}, {204, 204}, {0, 288}, {-204, 204},
+            {-288, 0}, {-204, -204}, {0, -288}, {204, -204}};
 
     /** Bloklar kayıtlardan sonra, ilk kullanımda yüklenir. */
     private static final class P {
@@ -32,7 +48,10 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
         static final BlockState FENER = CennetMod.NUR_FENERI.get().defaultBlockState();
         static final BlockState BULUT = CennetMod.BULUT_BLOGU.get().defaultBlockState();
         static final BlockState ALTIN = Blocks.GOLD_BLOCK.defaultBlockState();
+        static final BlockState MASUMIYET = Blocks.DIAMOND_BLOCK.defaultBlockState();   // "yıldız zemini"
         static final BlockState CAM = Blocks.WHITE_STAINED_GLASS.defaultBlockState();
+        static final BlockState CAM_MAVI = Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState();
+        static final BlockState CUBUK = Blocks.END_ROD.defaultBlockState();             // nur mızrağı
         static final BlockState SU = Blocks.WATER.defaultBlockState();
         static final BlockState CIM = Blocks.GRASS_BLOCK.defaultBlockState();
         static final BlockState GOVDE = Blocks.CHERRY_LOG.defaultBlockState();
@@ -57,7 +76,10 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
                 int x = x0 + lx, z = z0 + lz;
                 long r2 = (long) x * x + (long) z * z;
                 if (r2 <= (long) SEHIR_R * SEHIR_R) sehirKolonu(lvl, mp, x, z);
-                else if (r2 > 360L * 360L) tepe(lvl, mp, x, z, Math.sqrt((double) r2));
+                else if (r2 > 360L * 360L) {
+                    tepe(lvl, mp, x, z, Math.sqrt((double) r2));
+                    yildizAdasi(lvl, mp, x, z);
+                }
             }
         }
         return true;
@@ -67,7 +89,7 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
         lvl.setBlock(mp.set(x, y, z), s, 2);
     }
 
-    // ------------------------------------------------------------------ dış tepeler
+    // ------------------------------------------------------------------ dış tepeler ve yüzen adacıklar
 
     private static void tepe(WorldGenLevel lvl, BlockPos.MutableBlockPos mp, int x, int z, double r) {
         double w = smooth(360, 470, r);
@@ -75,6 +97,22 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
         double d = 0.65 * vn(x / 28.0, z / 28.0) + 0.35 * vn(x / 11.0 + 50, z / 11.0 + 50);
         int h = (int) (d * w * 8);
         for (int y = G; y <= ZEMIN + h; y++) set(lvl, mp, x, y, z, P.BULUT);
+    }
+
+    /** Nadiren beliren "sabit yıldız": gökyüzünde asılı duran fenerli bulut adacığı. */
+    private static void yildizAdasi(WorldGenLevel lvl, BlockPos.MutableBlockPos mp, int x, int z) {
+        int cx = Math.floorDiv(x, 96), cz = Math.floorDiv(z, 96);
+        int h = hash(cx, cz);
+        if (h % 37 != 0) return;
+        int ox = cx * 96 + 48 + (h % 17) - 8;
+        int oz = cz * 96 + 48 + ((h >> 5) % 17) - 8;
+        int dx = x - ox, dz = z - oz;
+        int d2 = dx * dx + dz * dz;
+        if (d2 > 20) return;
+        int y0 = ZEMIN + 16 + (h >> 9) % 8;
+        set(lvl, mp, x, y0, z, P.BULUT);
+        if (d2 == 0) set(lvl, mp, x, y0 + 1, z, P.FENER);
+        else if (d2 <= 4) set(lvl, mp, x, y0 + 1, z, P.BULUT);
     }
 
     private static double smooth(double a, double b, double x) {
@@ -118,21 +156,24 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
         int adx = Math.abs(dx), adz = Math.abs(dz);
         double r = Math.sqrt((double) dx * dx + (double) dz * dz);
 
-        // çeşmeler (köşegenlerde)
-        int fx = adx - 40, fz = adz - 40, f2 = fx * fx + fz * fz;
-        if (f2 <= 36) return f2 == 0 ? P.TUGLA : (f2 <= 25 ? P.SU : P.TUGLA);
-        // merkez ışığı
-        if (adx <= 1 && adz <= 1) return P.FENER;
-        // ana caddeler (kanal ve yeşil halkanın üstünde köprü olur); güneyde kapıdan öteye yaklaşım yolu
-        boolean cadde = (adx <= 4 && dz <= 345 && (dz >= 0 || -dz <= 290)) || (adz <= 4 && adx <= 290);
-        if (cadde) return P.TUGLA;
-        if (r <= 56) return (r >= 44 && r < 46) ? null : P.TUGLA;   // büyük meydan
-        if (r < 64) return P.CIM;                                    // iç park
-        if (r < 67) return P.SU;                                     // halka kanal
-        if (r >= 70 && r < 78) return P.TUGLA;                       // halka yol
-        if (r >= 78 && r < 88) return P.CIM;
-        int gz = dz - KAPI;
-        if (gz >= -12 && gz <= 14 && adx <= 32) return P.TUGLA;     // kapı avlusu
+        // ana caddeler (kanal üstünde köprü olur); sekiz kapı avlusu
+        boolean cadde = (adx <= 4 && adz <= 345 && (dz >= 0 || -dz <= 290)) || (adz <= 4 && adx <= 290);
+        if (cadde) {
+            for (int[] k : KAPILAR)
+                if (Math.abs(dx - k[0]) <= 24 && Math.abs(dz - k[1]) <= 24) return P.TUGLA;
+            return P.TUGLA;
+        }
+        // Kevser halka kanalı + korkuluklar
+        if (r >= 64 && r < 68) return P.SU;
+        if ((r >= 63 && r < 64) || (r >= 68 && r < 69)) return P.TUGLA;
+        // Arş-ı Nur Meydanı: sekiz köşeli yıldız mozaiği
+        if (r <= 56) {
+            if (r <= 30 && (adx == adz || adx <= 1 || adz <= 1)) return P.ALTIN;   // yıldız hatları
+            return P.TUGLA;
+        }
+        if (r < 64) return P.CIM;                                    // Sidre Parkı
+        if (r >= 70 && r < 78) return P.TUGLA;                       // Hatime Yolu
+        if (r >= 78 && r < 88) return P.CIM;                         // Rayhan Bahçeleri
         if (r >= 88 && r <= 272) {
             Hc c = hucre(dx, dz);
             if (c.bina && c.ax <= c.half + 1 && c.az <= c.half + 1) return P.TUGLA;
@@ -149,23 +190,32 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
 
         if (adx <= 18 && adz <= 18) return katedral(dx, dz, dy, adx, adz);
 
-        // çan kuleleri (±26, ±26)
+        // dört minare (±26, ±26)
         int tx = adx - 26, tz = adz - 26;
         if (Math.abs(tx) <= 6 && Math.abs(tz) <= 6) return kule(tx, tz, dy, 36);
 
-        // güney ana kapı
+        // dört melek heykeli: (±60, 0) ve (0, ±60)
+        if (adx >= 58 && adx <= 62 && adz <= 8) return melek(dx - 60 * Integer.signum(dx), dz, dy);
+        if (adz >= 58 && adz <= 62 && adx <= 8) return melek(dx, dz - 60 * Integer.signum(dz), dy);
+
+        // güney büyük kapı (Nur Kapısı)
         int gz = dz - KAPI;
         if (adx <= 26 && gz >= -8 && gz <= 8) return kapi(dx, gz, dy, adx);
 
-        // sur halkası (kapı hariç), dört yönde geçit
+        // sekiz kapı kulesi
+        for (int[] k : KAPILAR) {
+            int gx = dx - k[0], gzc = dz - k[1];
+            if (Math.abs(gx) <= 6 && Math.abs(gzc) <= 6) return kule(gx, gzc, dy, 20);
+        }
+
+        // sur halkası (kapı kulelerinin altından geçer, geçitler açık)
         if (r2 >= 286L * 286L && r2 < 290L * 290L && dy <= 11) {
-            boolean gecit = (adx <= 5 && dz < 0) || (adz <= 5);
-            if (gecit && dy <= 7) return null;
+            if (gecit(dx, dz) && dy <= 8) return null;
             if (dy == 11) return ((dx + dz) & 1) == 0 ? P.TUGLA : null;
             return dy == 10 ? P.ALTIN : P.TUGLA;
         }
 
-        // cadde fenerleri
+        // cadde fenerleri (iki sıra)
         if (r2 > 62L * 62L && r2 < 285L * 285L && !(r2 >= 63L * 63L && r2 <= 68L * 68L)) {
             boolean direk = (adz == 6 && dx % 16 == 0 && adx <= 285) || (adx == 6 && dz % 16 == 0 && adz <= 285);
             if (direk) {
@@ -173,16 +223,15 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
                 if (dy == 4) return P.FENER;
             }
         }
+        // Hatime Yolu fenerleri (halka)
+        if (r2 >= 70L * 70 && r2 < 78L * 78 && (adx + adz) % 16 == 0 && dy <= 3) return P.SUTUN;
+        if (r2 >= 70L * 70 && r2 < 78L * 78 && (adx + adz) % 16 == 0 && dy == 4) return P.FENER;
 
-        // çeşme direkleri
+        // Kevser çeşmeleri (köşegenlerde, (±40,±40))
         int fx = adx - 40, fz = adz - 40, f2 = fx * fx + fz * fz;
-        if (f2 <= 36) {
-            if (f2 == 0) return dy <= 3 ? P.SUTUN : (dy == 4 ? P.FENER : null);
-            if (f2 > 25 && dy == 0) return P.TUGLA;
-            return null;
-        }
+        if (f2 <= 36) return cesme(dx, dz, fx, fz, f2, dy);
 
-        // iç park ağaçları (56 < r < 64)
+        // Sidre Parkı ağaçları (56 < r < 64)
         if (r2 > 57L * 57L && r2 < 63L * 63L) {
             int cx = Math.floorDiv(dx, 8), cz = Math.floorDiv(dz, 8);
             if (hash(cx, cz) % 3 == 0) {
@@ -198,13 +247,33 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
         return null;
     }
 
-    // ---- katedral
+    /** Surdaki bir nokta sekiz kapıdan birinin geçidinde mi? */
+    private static boolean gecit(int dx, int dz) {
+        for (int[] k : KAPILAR)
+            if (Math.abs(dx - k[0]) <= 5 && Math.abs(dz - k[1]) <= 5) return true;
+        return false;
+    }
+
+    // ---- Arş-ı Nur (merkez katedral): kubbe, altın kaburgalar, hilal ve nur alemi
 
     private static BlockState katedral(int dx, int dz, int dy, int adx, int adz) {
         if (dy >= 24) {
-            if (dx == 0 && dz == 0 && dy >= 36 && dy <= 52) return dy <= 50 ? P.SUTUN : P.FENER;
+            // nur alemi: orta mızrak + hilal tacı
+            if (dx == 0 && dz == 0 && dy >= 36) return P.SUTUN;
+            if (dz == 0 && dy >= 54) {                                  // hilal (dikey altın halka, içi oyuk)
+                int ddy = dy - 58;
+                boolean dis = dx * dx + ddy * ddy <= 20;
+                boolean ic = (dx + 2) * (dx + 2) + ddy * ddy <= 10;
+                if (dis && !ic) return P.ALTIN;
+            }
+            if (dx == 0 && dz == 0 && dy >= 62) return P.FENER;
+            // kubbe: küre kabuğu + 8 altın kaburga + altın kuşak
             double r = Math.sqrt((double) dx * dx + (double) dz * dz + (double) (dy - 24) * (dy - 24));
-            if (r >= 12 && r <= 13.4) return dy == 24 ? P.ALTIN : P.TUGLA;
+            if (r >= 12 && r <= 13.4) {
+                double ang = Math.atan2(dz, dx);
+                if (Math.abs(Math.sin(4 * ang)) < 0.18) return P.ALTIN; // kaburga
+                return dy == 24 ? P.ALTIN : P.TUGLA;
+            }
             return null;
         }
         int m = Math.max(adx, adz);
@@ -217,36 +286,78 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
             boolean kose = adx == 12 && adz == 12;
             int diger = adx == 12 ? adz : adx;
             if (!kose && diger <= 2 && dy <= 8) return null;                                  // kapı
-            if (!kose && diger <= 9 && diger % 4 == 0 && dy >= 10 && dy <= 16) return null;  // pencere
+            if (!kose && diger <= 9 && diger % 4 == 0 && dy >= 10 && dy <= 16) return null;  // kemerli pencere
             if (dy == 23) return P.ALTIN;
+            if (dy == 0 && ((adx + adz) % 4 == 0)) return P.MASUMIYET;                        // yıldız zemin taşları
             return (kose || dy == 0) ? P.SUTUN : P.TUGLA;
         }
-        if (adx == 6 && adz == 6) return P.SUTUN;   // iç sütunlar
+        if (adx == 6 && adz == 6) return dy <= 16 ? P.SUTUN : null;   // iç sütunlar (altın başlıklı)
+        if ((adx == 6 && adz < 6) || (adz == 6 && adx < 6)) return dy == 16 ? P.ALTIN : null;
+        // iç avlu: merkezde nur havuzu
+        if (dx * dx + dz * dz <= 4) return dy == 0 ? P.FENER : null;
         return null;
     }
 
-    // ---- kuleler (çan kulesi ve kapı kuleleri)
+    // ---- melek heykeli: kaide, sütun gövde, cam kanatlar, altın hale
+
+    private static BlockState melek(int ux, int uz, int dy) {
+        int ax = Math.abs(ux), az = Math.abs(uz);
+        if (ax <= 2 && az <= 2 && dy <= 1) return (dy == 1 && (ax == 2 || az == 2)) ? P.ALTIN : P.TUGLA;
+        if (ux == 0 && uz == 0) {
+            if (dy >= 2 && dy <= 7) return P.SUTUN;
+            if (dy == 8) return P.CAM;                              // nur yüzü
+            return null;
+        }
+        int d2 = ux * ux + uz * uz;
+        if (dy == 9 && d2 >= 2 && d2 <= 5) return P.ALTIN;          // hale (başın çevresinde altın halka)
+        // kanatlar: gövdeye dik uzanan tüylü cam kanatlar, ucu altın
+        if (ax <= 1 && uz != 0) {
+            int reach = 8 - dy;
+            if (dy >= 4 && dy <= 7 && az <= reach) return az == reach ? P.ALTIN : P.CAM_MAVI;
+            if (dy == 3 && az <= 4) return P.CAM_MAVI;              // alt tüyler
+        }
+        return null;
+    }
+
+    // ---- Kevser çeşmesi: kaideli havuz, fenerli orta direk, dört su fıskıyesi
+
+    private static BlockState cesme(int dx, int dz, int fx, int fz, int f2, int dy) {
+        if (f2 == 0) {                                              // orta direk
+            if (dy <= 2) return P.SUTUN;
+            return dy == 3 ? P.FENER : null;
+        }
+        if (f2 <= 9) {                                              // havuz
+            if (dy == 0) return P.SU;
+            if (dy == 1 && ((fx == 0 && Math.abs(fz) == 2) || (fz == 0 && Math.abs(fx) == 2))) return P.CUBUK;
+            return null;
+        }
+        if (f2 <= 25) return dy == 0 ? P.TUGLA : null;              // kenar taşı
+        return null;
+    }
+
+    // ---- kuleler (minareler, kapı kuleleri)
 
     private static BlockState kule(int tx, int tz, int dy, int h) {
         double r2 = tx * tx + tz * tz;
         if (dy <= h) {
             if (r2 > 30.25) return null;
             if (r2 < 12.25 && dy != 0) return null;
+            if (dy == 6 || dy == 18) return r2 >= 20.25 ? P.ALTIN : null;   // balkon kuşağı
             if (r2 >= 12.25 && (tx == 0 || tz == 0) && dy % 10 >= 5 && dy % 10 <= 7) return null;   // ok yarığı
             return dy % 12 == 11 ? P.ALTIN : P.TUGLA;
         }
-        double rr = 6.2 - (dy - h - 1) * 0.33;
+        double rr = 6.2 - (dy - h - 1) * 0.33;                      // sivri kemerli başlık
         if (rr > 0.5 && r2 <= rr * rr) return rr < 1.2 ? P.FENER : P.TUGLA;
         return null;
     }
 
-    // ---- güney kapı
+    // ---- güney büyük kapı (Nur Kapısı): ikiz kule, cam mühürlü kemer, nur feneri
 
     private static BlockState kapi(int dx, int gz, int dy, int adx) {
         int tx = adx - 16;
         if (Math.abs(tx) <= 6 && Math.abs(gz) <= 6) return kule(tx, gz, dy, 38);
         if (adx < 10 && Math.abs(gz) <= 2) {
-            if (adx <= 6 && dy < 10 + (int) Math.sqrt(36 - adx * adx)) return gz == 0 ? P.CAM : null;   // kapalı kemerli kapı (cam mühür)
+            if (adx <= 6 && dy < 10 + (int) Math.sqrt(36 - adx * adx)) return gz == 0 ? P.CAM : null;   // cam mühür
             if (dy <= 30) return (dy == 16 && dx == 0) ? P.FENER : P.TUGLA;
             if (dy == 31 && dx % 2 == 0) return P.TUGLA;
             return null;
@@ -258,7 +369,7 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
         return null;
     }
 
-    // ---- semtler: iç halkada gökdelenler, dışta bahçeli köy evleri, arada parklar
+    // ---- semtler: iç halkada minareli gökdelenler, dışta bahçeli köy evleri, arada parklar
 
     private static final class Hc {
         boolean bina;
@@ -330,8 +441,14 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
     private static BlockState gokdelen(Hc c, int dy) {
         int half = c.half;
         if (dy > c.H) {
-            if (c.ax == 0 && c.az == 0 && dy <= c.H + 6) return dy == c.H + 6 ? P.FENER : P.SUTUN;
+            // köşe minareleri (yüksek binalarda)
             if (c.H >= 36 && c.ax == half && c.az == half && dy <= c.H + 4) return dy == c.H + 4 ? P.FENER : P.SUTUN;
+            // piramit çatı
+            int k = dy - c.H;
+            int reach = half - k;
+            if (k <= half && c.ax <= reach && c.az <= reach) return P.TUGLA;
+            // nur mızrağı
+            if (c.ax == 0 && c.az == 0 && dy <= c.H + 7) return dy == c.H + 7 ? P.FENER : P.CUBUK;
             return null;
         }
         if (c.ax > half || c.az > half) return null;
@@ -356,6 +473,7 @@ public class NurBaskentFeature extends Feature<NoneFeatureConfiguration> {
             if (c.ax > half || c.az > half) return null;
             if (c.ax != half && c.az != half) return null;
             if (dy <= 2 && kapiYuzu(c, half)) return null;
+            if (dy == 3 && kapiYuzu(c, half)) return P.ALTIN;               // altın lenton (kapı başlığı)
             boolean kose = c.ax == half && c.az == half;
             if (!kose && (dy == 2 || dy == 3) && (c.ax + c.az) % 3 == 0) return P.CAM;
             return kose ? P.SUTUN : P.TUGLA;

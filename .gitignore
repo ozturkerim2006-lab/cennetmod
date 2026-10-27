@@ -1,5 +1,22 @@
+# Gradle
 .gradle/
 build/
-run/
+out/
+classes/
+
+# IDE
 .idea/
 *.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+bin/
+.vscode/
+
+# Çalıştırma dizini / sistem
+run/
+*.hprof
+.DS_Store
+Thumbs.db

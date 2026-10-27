@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "cennetmod:block/karanlik_govde_top",
+    "side": "cennetmod:block/karanlik_govde"
+  }
+}

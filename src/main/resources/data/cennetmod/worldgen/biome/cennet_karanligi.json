@@ -1,0 +1,76 @@
+{
+  "has_precipitation": false,
+  "temperature": 0.5,
+  "downfall": 0.0,
+  "effects": {
+    "sky_color": 7012013,
+    "fog_color": 3932260,
+    "water_color": 6291609,
+    "water_fog_color": 2621490,
+    "grass_color": 6958238,
+    "foliage_color": 9060288
+  },
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_gold",
+      "minecraft:ore_redstone",
+      "minecraft:ore_lapis",
+      "minecraft:ore_diamond",
+      "minecraft:ore_copper",
+      "cennetmod:ay_cevheri_yerlesim"
+    ],
+    [],
+    [],
+    [
+      "cennetmod:karanlik_agac_yerlesim",
+      "minecraft:patch_grass_plain"
+    ],
+    []
+  ],
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:zombie",
+        "weight": 100,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:skeleton",
+        "weight": 80,
+        "minCount": 2,
+        "maxCount": 3
+      },
+      {
+        "type": "minecraft:enderman",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ],
+    "creature": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": []
+  },
+  "spawn_costs": {}
+}

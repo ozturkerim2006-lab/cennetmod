@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "cennetmod:block/kutsal_sutun"
+    },
+    "axis=z": {
+      "model": "cennetmod:block/kutsal_sutun",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "cennetmod:block/kutsal_sutun",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

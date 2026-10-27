@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "cennetmod:block/kutsal_sutun_top",
+    "side": "cennetmod:block/kutsal_sutun"
+  }
+}

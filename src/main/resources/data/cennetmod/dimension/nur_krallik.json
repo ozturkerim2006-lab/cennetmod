@@ -1,0 +1,22 @@
+{
+  "type": "cennetmod:nur_krallik",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "cennetmod:nur_baskenti",
+      "features": true,
+      "lakes": false,
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 1
+        },
+        {
+          "block": "cennetmod:bulut_blogu",
+          "height": 164
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

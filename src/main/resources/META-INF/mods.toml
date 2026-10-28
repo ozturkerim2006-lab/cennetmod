@@ -4,7 +4,7 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="cennetmod"
-version="${mod_version}"
+version="1.1.0"
 displayName="Cennet Karanlığı"
 description='''Yarık Asası ile ulaşılan yeni boyut: Cennet Karanlığı.'''
 

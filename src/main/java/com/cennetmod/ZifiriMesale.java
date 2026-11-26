@@ -10,8 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class ZifiriMesale extends Item {
-    public ZifiriMesale() {
-        super(new Item.Properties().stacksTo(1));
+    public ZifiriMesale(Item.Properties props) {
+        super(props);
     }
 
     @Override

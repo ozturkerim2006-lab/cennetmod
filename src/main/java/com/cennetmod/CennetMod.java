@@ -1,4 +1,5 @@
 package com.cennetmod;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
@@ -129,10 +130,10 @@ public class CennetMod {
       AGAC_GOZU = ENTITIES.register("agac_gozu", () -> EntityType.Builder.of(AgacGozu::new, MobCategory.MONSTER).sized(1.0F, 1.0F).build("agac_gozu"));
       SIYAH_FIGUR = ENTITIES.register("siyah_figur", () -> EntityType.Builder.of(SiyahFigur::new, MobCategory.MONSTER).sized(0.6F, 2.0F).build("siyah_figur"));
       GOKSEL_MELEK = ENTITIES.register("goksel_melek", () -> EntityType.Builder.of(GokselMelekBoss::new, MobCategory.MONSTER).sized(1.0F, 2.4F).build("goksel_melek"));
-      CAMUR_YARATIGI_YUMURTA = ITEMS.register("camur_yaratigi_spawn_egg", () -> new ForgeSpawnEggItem(CAMUR_YARATIGI, 0x3b2f2f, 0x6b4f3a, new Item.Properties()));
-      AGAC_GOZU_YUMURTA = ITEMS.register("agac_gozu_spawn_egg", () -> new ForgeSpawnEggItem(AGAC_GOZU, 0x1b3b1b, 0xff2222, new Item.Properties()));
-      SIYAH_FIGUR_YUMURTA = ITEMS.register("siyah_figur_spawn_egg", () -> new ForgeSpawnEggItem(SIYAH_FIGUR, 0x0a0a0a, 0x440066, new Item.Properties()));
-      GOKSEL_MELEK_YUMURTA = ITEMS.register("goksel_melek_spawn_egg", () -> new ForgeSpawnEggItem(GOKSEL_MELEK, 0xffffff, 0xffd700, new Item.Properties()));
+      CAMUR_YARATIGI_YUMURTA = ITEMS.register("camur_yaratigi_spawn_egg", () -> new ForgeSpawnEggItem(CennetMod.CAMUR_YARATIGI, 0x3b2f2f, 0x6b4f3a, new Item.Properties()));
+      AGAC_GOZU_YUMURTA = ITEMS.register("agac_gozu_spawn_egg", () -> new ForgeSpawnEggItem(CennetMod.AGAC_GOZU, 0x1b3b1b, 0xff2222, new Item.Properties()));
+      SIYAH_FIGUR_YUMURTA = ITEMS.register("siyah_figur_spawn_egg", () -> new ForgeSpawnEggItem(CennetMod.SIYAH_FIGUR, 0x0a0a0a, 0x440066, new Item.Properties()));
+      GOKSEL_MELEK_YUMURTA = ITEMS.register("goksel_melek_spawn_egg", () -> new ForgeSpawnEggItem(CennetMod.GOKSEL_MELEK, 0xffffff, 0xffd700, new Item.Properties()));
       MELEK = ENTITIES.register("melek_asker", () -> Builder.of(AngelSoldier::new, MobCategory.MISC).sized(1.8F, 6.0F).clientTrackingRange(10).build("melek_asker"));
    }
     public static RegistryObject<Feature<?>> ZIFIRI_TAPINAK;

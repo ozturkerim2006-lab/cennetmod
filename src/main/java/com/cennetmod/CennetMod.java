@@ -1,9 +1,9 @@
 package com.cennetmod;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType.Builder;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -25,116 +25,114 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-@Mod(CennetMod.MODID)
+@Mod("cennetmod")
 public class CennetMod {
-    public static final String MODID = "cennetmod";
+   public static final String MODID = "cennetmod";
+   public static final DeferredRegister<Item> ITEMS;
+   public static final DeferredRegister<Block> BLOCKS;
+   public static final DeferredRegister<Feature<?>> FEATURES;
+   public static final DeferredRegister<EntityType<?>> ENTITIES;
+   public static final RegistryObject<Item> YARIK_ASASI;
+   public static final RegistryObject<Item> YILDIZ_KRISTALI;
+   public static final RegistryObject<Item> NUR_KARTI;
+   public static final RegistryObject<Item> BATI_KARTI;
+   public static final RegistryObject<Item> PEGASUS_BILETI;
+   public static final RegistryObject<Item> ZIFIRI_MESALE;
+   public static final RegistryObject<Block> KARANLIK_GOVDE;
+   public static final RegistryObject<Block> KARANLIK_YAPRAK;
+   public static final RegistryObject<Block> AY_CEVHERI;
+   public static final RegistryObject<Block> BULUT_BLOGU;
+   public static final RegistryObject<Block> BULUT_TUGLASI;
+   public static final RegistryObject<Block> KUTSAL_SUTUN;
+   public static final RegistryObject<Block> NUR_FENERI;
+   public static final RegistryObject<Item> BULUT_BLOGU_ITEM;
+   public static final RegistryObject<Item> BULUT_TUGLASI_ITEM;
+   public static final RegistryObject<Item> KUTSAL_SUTUN_ITEM;
+   public static final RegistryObject<Item> NUR_FENERI_ITEM;
+   public static final RegistryObject<Feature<NoneFeatureConfiguration>> NUR_BASKENT;
+   public static final RegistryObject<Item> KARANLIK_GOVDE_ITEM;
+   public static final RegistryObject<Item> KARANLIK_YAPRAK_ITEM;
+   public static final RegistryObject<Item> AY_CEVHERI_ITEM;
+   public static final RegistryObject<EntityType<AngelSoldier>> MELEK;
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, MODID);
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
+   public CennetMod() {
+      IEventBus var1 = FMLJavaModLoadingContext.get().getModEventBus();
+      BLOCKS.register(var1);
+      ITEMS.register(var1);
+      ENTITIES.register(var1);
+      FEATURES.register(var1);
+      var1.addListener(this::nitelikler);
+      var1.addListener(this::tabIcerigi);
+   }
 
-    // Eşyalar
-    public static final RegistryObject<Item> YARIK_ASASI = ITEMS.register("yarik_asasi",
-            () -> new YarikAsasi(new Item.Properties().durability(64).stacksTo(1)));
-    public static final RegistryObject<Item> YILDIZ_KRISTALI = ITEMS.register("yildiz_kristali",
-            () -> new Item(new Item.Properties()));
+   private void nitelikler(EntityAttributeCreationEvent var1) {
+      var1.put((EntityType)MELEK.get(), AngelSoldier.nitelikler().build());
+   }
 
-    public static final RegistryObject<Item> NUR_KARTI = ITEMS.register("nur_kapisi_kimlik_karti",
-            () -> new NurKarti(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+   private void tabIcerigi(BuildCreativeModeTabContentsEvent var1) {
+      if (var1.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+         var1.accept(YARIK_ASASI);
+         var1.accept(NUR_KARTI);
+         var1.accept(BATI_KARTI);
+         var1.accept(PEGASUS_BILETI);
+         var1.accept(ZIFIRI_MESALE);
+      }
 
-    // Bloklar
-    public static final RegistryObject<Block> KARANLIK_GOVDE = BLOCKS.register("karanlik_govde",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)));
-    public static final RegistryObject<Block> KARANLIK_YAPRAK = BLOCKS.register("karanlik_yaprak",
-            () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES).lightLevel(s -> 4)));
-    public static final RegistryObject<Block> AY_CEVHERI = BLOCKS.register("ay_cevheri",
-            () -> new DropExperienceBlock(UniformInt.of(2, 5), BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE).lightLevel(s -> 7)));
+      if (var1.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
+         var1.accept(KARANLIK_GOVDE_ITEM);
+         var1.accept(KARANLIK_YAPRAK_ITEM);
+         var1.accept(AY_CEVHERI_ITEM);
+      }
 
-    // Nur Başkenti blokları
-    public static final RegistryObject<Block> BULUT_BLOGU = BLOCKS.register("bulut_blogu",
-            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL)));
-    public static final RegistryObject<Block> BULUT_TUGLASI = BLOCKS.register("bulut_tuglasi",
-            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)));
-    public static final RegistryObject<Block> KUTSAL_SUTUN = BLOCKS.register("kutsal_sutun",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.QUARTZ_PILLAR)));
-    public static final RegistryObject<Block> NUR_FENERI = BLOCKS.register("nur_feneri",
-            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.SEA_LANTERN)));
+      if (var1.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+         var1.accept(BULUT_BLOGU_ITEM);
+         var1.accept(BULUT_TUGLASI_ITEM);
+         var1.accept(KUTSAL_SUTUN_ITEM);
+         var1.accept(NUR_FENERI_ITEM);
+      }
 
-    public static final RegistryObject<Item> BULUT_BLOGU_ITEM = ITEMS.register("bulut_blogu",
-            () -> new BlockItem(BULUT_BLOGU.get(), new Item.Properties()));
-    public static final RegistryObject<Item> BULUT_TUGLASI_ITEM = ITEMS.register("bulut_tuglasi",
-            () -> new BlockItem(BULUT_TUGLASI.get(), new Item.Properties()));
-    public static final RegistryObject<Item> KUTSAL_SUTUN_ITEM = ITEMS.register("kutsal_sutun",
-            () -> new BlockItem(KUTSAL_SUTUN.get(), new Item.Properties()));
-    public static final RegistryObject<Item> NUR_FENERI_ITEM = ITEMS.register("nur_feneri",
-            () -> new BlockItem(NUR_FENERI.get(), new Item.Properties()));
+      if (var1.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+         var1.accept(YILDIZ_KRISTALI);
+      }
 
-    // Şehir üreticisi
-    public static final RegistryObject<Feature<NoneFeatureConfiguration>> NUR_BASKENT =
-            FEATURES.register("nur_baskent", NurBaskentFeature::new);
+   }
 
-    // Blok eşyaları
-    public static final RegistryObject<Item> KARANLIK_GOVDE_ITEM = ITEMS.register("karanlik_govde",
-            () -> new BlockItem(KARANLIK_GOVDE.get(), new Item.Properties()));
-    public static final RegistryObject<Item> KARANLIK_YAPRAK_ITEM = ITEMS.register("karanlik_yaprak",
-            () -> new BlockItem(KARANLIK_YAPRAK.get(), new Item.Properties()));
-    public static final RegistryObject<Item> AY_CEVHERI_ITEM = ITEMS.register("ay_cevheri",
-            () -> new BlockItem(AY_CEVHERI.get(), new Item.Properties()));
-
-    // Varlıklar
-    public static final RegistryObject<EntityType<AngelSoldier>> MELEK = ENTITIES.register("melek_asker",
-            () -> EntityType.Builder.<AngelSoldier>of(AngelSoldier::new, MobCategory.MISC)
-                    .sized(1.8f, 6.0f).clientTrackingRange(10).build("melek_asker"));
-
-    @SuppressWarnings("removal")
-    public CennetMod() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        BLOCKS.register(bus);
-        ITEMS.register(bus);
-        ENTITIES.register(bus);
-        FEATURES.register(bus);
-        bus.addListener(this::tabIcerigi);
-        bus.addListener(this::nitelikler);
-    }
-
-    private void nitelikler(EntityAttributeCreationEvent e) {
-        e.put(MELEK.get(), AngelSoldier.nitelikler().build());
-        e.put(CAMUR_YARATIGI.get(), CamurYaratigi.createAttributes().build());
-        e.put(AGAC_GOZU.get(), AgacGozu.createAttributes().build());
-        e.put(SIYAH_FIGUR.get(), SiyahFigur.createAttributes().build());
-        e.put(GOKSEL_MELEK.get(), GokselMelekBoss.createAttributes().build());
-    }
-
-    private void tabIcerigi(BuildCreativeModeTabContentsEvent e) {
-        if (e.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            e.accept(YARIK_ASASI); e.accept(NUR_KARTI); e.accept(BATI_KARTI); e.accept(PEGASUS_BILETI); e.accept(ZIFIRI_MESALE);
-        }
-        if (e.getTabKey() == CreativeModeTabs.COMBAT) { e.accept(YILDIZ_KILICI); }
-        if (e.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-            e.accept(CAMUR_YARATIGI_YUMURTA); e.accept(AGAC_GOZU_YUMURTA); e.accept(SIYAH_FIGUR_YUMURTA); e.accept(GOKSEL_MELEK_YUMURTA);
-        }
-        if (e.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
-            e.accept(KARANLIK_GOVDE_ITEM);
-            e.accept(KARANLIK_YAPRAK_ITEM);
-            e.accept(AY_CEVHERI_ITEM);
-        }
-        if (e.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            e.accept(BULUT_BLOGU_ITEM);
-            e.accept(BULUT_TUGLASI_ITEM);
-            e.accept(KUTSAL_SUTUN_ITEM);
-            e.accept(NUR_FENERI_ITEM);
-        }
-        if (e.getTabKey() == CreativeModeTabs.INGREDIENTS) e.accept(YILDIZ_KRISTALI);
-    }
-
-    public static final RegistryObject<Item> YILDIZ_KILICI = ITEMS.register("yildiz_kilici", YildizKilici::new);
-    public static final RegistryObject<EntityType<CamurYaratigi>> CAMUR_YARATIGI = ENTITIES.register("camur_yaratigi",
-            () -> EntityType.Builder.of(CamurYaratigi::new, MobCategory.MONSTER).sized(0.8F, 1.8F).build("camur_yaratigi"));
-    public static final RegistryObject<EntityType<AgacGozu>> AGAC_GOZU = ENTITIES.register("agac_gozu",
-            () -> EntityType.Builder.of(AgacGozu::new, MobCategory.MONSTER).sized(1.0F, 1.0F).build("agac_gozu"));
-    public static final RegistryObject<EntityType<SiyahFigur>> SIYAH_FIGUR = ENTITIES.register("siyah_figur",
-            () -> EntityType.Builder.of(SiyahFigur::new, MobCategory.MONSTER).sized(0.6F, 2.0F).build("siyah_figur"));
-    public static final RegistryObject<EntityType<GokselMelekBoss>> GOKSEL_MELEK = ENTITIES.register("goksel_melek",
-            () -> EntityType.Builder.of(GokselMelekBoss::new, MobCategory.MONSTER).sized(1.0F, 2.4F).build("goksel_melek"));
+   static {
+      ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "cennetmod");
+      BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, "cennetmod");
+      FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, "cennetmod");
+      ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, "cennetmod");
+      YARIK_ASASI = ITEMS.register("yarik_asasi", () -> new YarikAsasi((new Item.Properties()).durability(64).stacksTo(1)));
+      YILDIZ_KRISTALI = ITEMS.register("yildiz_kristali", () -> new Item(new Item.Properties()));
+      NUR_KARTI = ITEMS.register("nur_kapisi_kimlik_karti", () -> new NurKarti((new Item.Properties()).stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+      BATI_KARTI = ITEMS.register("bati_sehri_giris_karti", () -> new BatiKarti((new Item.Properties()).stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+      PEGASUS_BILETI = ITEMS.register("pegasus_bileti", () -> new PegasusBileti((new Item.Properties()).stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+      ZIFIRI_MESALE = ITEMS.register("zifiri_mesale", () -> new ZifiriMesale((new Item.Properties()).stacksTo(1).rarity(Rarity.RARE).fireResistant()));
+      KARANLIK_GOVDE = BLOCKS.register("karanlik_govde", () -> new RotatedPillarBlock(Properties.ofFullCopy(Blocks.OAK_LOG)));
+      KARANLIK_YAPRAK = BLOCKS.register("karanlik_yaprak", () -> new LeavesBlock(Properties.ofFullCopy(Blocks.OAK_LEAVES)));
+      AY_CEVHERI = BLOCKS.register("ay_cevheri", () -> new DropExperienceBlock(UniformInt.of(2, 5), Properties.ofFullCopy(Blocks.DIAMOND_ORE).lightLevel((var0) -> 7)));
+      BULUT_BLOGU = BLOCKS.register("bulut_blogu", () -> new Block(Properties.ofFullCopy(Blocks.WHITE_WOOL)));
+      BULUT_TUGLASI = BLOCKS.register("bulut_tuglasi", () -> new Block(Properties.ofFullCopy(Blocks.STONE_BRICKS)));
+      KUTSAL_SUTUN = BLOCKS.register("kutsal_sutun", () -> new RotatedPillarBlock(Properties.ofFullCopy(Blocks.QUARTZ_PILLAR)));
+      NUR_FENERI = BLOCKS.register("nur_feneri", () -> new Block(Properties.ofFullCopy(Blocks.SEA_LANTERN)));
+      BULUT_BLOGU_ITEM = ITEMS.register("bulut_blogu", () -> new BlockItem((Block)BULUT_BLOGU.get(), new Item.Properties()));
+      BULUT_TUGLASI_ITEM = ITEMS.register("bulut_tuglasi", () -> new BlockItem((Block)BULUT_TUGLASI.get(), new Item.Properties()));
+      KUTSAL_SUTUN_ITEM = ITEMS.register("kutsal_sutun", () -> new BlockItem((Block)KUTSAL_SUTUN.get(), new Item.Properties()));
+      NUR_FENERI_ITEM = ITEMS.register("nur_feneri", () -> new BlockItem((Block)NUR_FENERI.get(), new Item.Properties()));
+      NUR_BASKENT = FEATURES.register("nur_baskent", () -> new NurBaskentFeature());
+      KARANLIK_GOVDE_ITEM = ITEMS.register("karanlik_govde", () -> new BlockItem((Block)KARANLIK_GOVDE.get(), new Item.Properties()));
+      KARANLIK_YAPRAK_ITEM = ITEMS.register("karanlik_yaprak", () -> new BlockItem((Block)KARANLIK_YAPRAK.get(), new Item.Properties()));
+      AY_CEVHERI_ITEM = ITEMS.register("ay_cevheri", () -> new BlockItem((Block)AY_CEVHERI.get(), new Item.Properties()));
+      MELEK = ENTITIES.register("melek_asker", () -> Builder.of(AngelSoldier::new, MobCategory.MISC).sized(1.8F, 6.0F).clientTrackingRange(10).build("melek_asker"));
+   }
+    public static RegistryObject<Feature<?>> ZIFIRI_TAPINAK;
+    public static RegistryObject<Item> YILDIZ_KILICI;
+    public static RegistryObject<EntityType<CamurYaratigi>> CAMUR_YARATIGI;
+    public static RegistryObject<EntityType<AgacGozu>> AGAC_GOZU;
+    public static RegistryObject<EntityType<SiyahFigur>> SIYAH_FIGUR;
+    public static RegistryObject<EntityType<GokselMelekBoss>> GOKSEL_MELEK;
+    public static RegistryObject<Item> CAMUR_YARATIGI_YUMURTA;
+    public static RegistryObject<Item> AGAC_GOZU_YUMURTA;
+    public static RegistryObject<Item> SIYAH_FIGUR_YUMURTA;
+    public static RegistryObject<Item> GOKSEL_MELEK_YUMURTA;
 }

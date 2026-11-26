@@ -99,6 +99,10 @@ public class CennetMod {
 
     private void nitelikler(EntityAttributeCreationEvent e) {
         e.put(MELEK.get(), AngelSoldier.nitelikler().build());
+        e.put(CAMUR_YARATIGI.get(), CamurYaratigi.createAttributes().build());
+        e.put(AGAC_GOZU.get(), AgacGozu.createAttributes().build());
+        e.put(SIYAH_FIGUR.get(), SiyahFigur.createAttributes().build());
+        e.put(GOKSEL_MELEK.get(), GokselMelekBoss.createAttributes().build());
     }
 
     private void tabIcerigi(BuildCreativeModeTabContentsEvent e) {
@@ -116,4 +120,14 @@ public class CennetMod {
         }
         if (e.getTabKey() == CreativeModeTabs.INGREDIENTS) e.accept(YILDIZ_KRISTALI);
     }
+
+    public static final RegistryObject<Item> YILDIZ_KILICI = ITEMS.register("yildiz_kilici", YildizKilici::new);
+    public static final RegistryObject<EntityType<CamurYaratigi>> CAMUR_YARATIGI = ENTITIES.register("camur_yaratigi",
+            () -> EntityType.Builder.of(CamurYaratigi::new, MobCategory.MONSTER).sized(0.8F, 1.8F).build("camur_yaratigi"));
+    public static final RegistryObject<EntityType<AgacGozu>> AGAC_GOZU = ENTITIES.register("agac_gozu",
+            () -> EntityType.Builder.of(AgacGozu::new, MobCategory.MONSTER).sized(1.0F, 1.0F).build("agac_gozu"));
+    public static final RegistryObject<EntityType<SiyahFigur>> SIYAH_FIGUR = ENTITIES.register("siyah_figur",
+            () -> EntityType.Builder.of(SiyahFigur::new, MobCategory.MONSTER).sized(0.6F, 2.0F).build("siyah_figur"));
+    public static final RegistryObject<EntityType<GokselMelekBoss>> GOKSEL_MELEK = ENTITIES.register("goksel_melek",
+            () -> EntityType.Builder.of(GokselMelekBoss::new, MobCategory.MONSTER).sized(1.0F, 2.4F).build("goksel_melek"));
 }

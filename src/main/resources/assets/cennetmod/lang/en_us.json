@@ -9,5 +9,8 @@
   "block.cennetmod.bulut_blogu": "Cloud Block",
   "block.cennetmod.bulut_tuglasi": "Cloud Bricks",
   "block.cennetmod.kutsal_sutun": "Sacred Pillar",
-  "block.cennetmod.nur_feneri": "Nur Lantern"
+  "block.cennetmod.nur_feneri": "Nur Lantern",
+  "item.cennetmod.bati_sehri_giris_karti": "West City Entry Card",
+  "item.cennetmod.pegasus_bileti": "Pegasus Chariot Ticket",
+  "item.cennetmod.zifiri_mesale": "Pitch-Black Swamp Torch"
 }

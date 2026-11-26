@@ -42,7 +42,9 @@
       "cennetmod:karanlik_agac_yerlesim",
       "minecraft:patch_grass_plain"
     ],
-    []
+    [
+      "cennetmod:nur_baskent_yerlesim"
+    ]
   ],
   "spawners": {
     "monster": [

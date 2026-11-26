@@ -9,5 +9,8 @@
   "block.cennetmod.bulut_blogu": "Bulut Bloğu",
   "block.cennetmod.bulut_tuglasi": "Bulut Tuğlası",
   "block.cennetmod.kutsal_sutun": "Kutsal Sütun",
-  "block.cennetmod.nur_feneri": "Nur Feneri"
+  "block.cennetmod.nur_feneri": "Nur Feneri",
+  "item.cennetmod.bati_sehri_giris_karti": "Batı Şehri Giriş Kartı",
+  "item.cennetmod.pegasus_bileti": "Pegasus Arabası Çağırma Bileti",
+  "item.cennetmod.zifiri_mesale": "Zifiri Bataklık Meşalesi"
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " Y ",
+    " A ",
+    " S "
+  ],
+  "key": {
+    "Y": { "item": "cennetmod:yildiz_kristali" },
+    "A": { "item": "cennetmod:ay_cevheri" },
+    "S": { "item": "minecraft:stick" }
+  },
+  "result": {
+    "id": "cennetmod:yildiz_kilici",
+    "count": 1
+  }
+}

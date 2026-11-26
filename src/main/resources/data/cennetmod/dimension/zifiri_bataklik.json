@@ -1,0 +1,26 @@
+{
+  "type": "cennetmod:zifiri_bataklik",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "cennetmod:zifiri_bataklik",
+      "features": true,
+      "lakes": false,
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 1
+        },
+        {
+          "block": "minecraft:deepslate",
+          "height": 130
+        },
+        {
+          "block": "minecraft:mud",
+          "height": 4
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

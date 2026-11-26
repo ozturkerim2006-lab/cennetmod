@@ -22,8 +22,9 @@ public class YeniIcerikKayit {
             .add(Attributes.MAX_HEALTH, 60.0D).add(Attributes.ATTACK_DAMAGE, 9.0D)
             .add(Attributes.MOVEMENT_SPEED, 0.30D).add(Attributes.FOLLOW_RANGE, 40.0D).build());
         e.put(CennetMod.GOKSEL_MELEK.get(), Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 300.0D).add(Attributes.ATTACK_DAMAGE, 14.0D)
-            .add(Attributes.MOVEMENT_SPEED, 0.32D).add(Attributes.FOLLOW_RANGE, 48.0D).build());
+            .add(Attributes.MAX_HEALTH, 400.0D).add(Attributes.ATTACK_DAMAGE, 14.0D)
+            .add(Attributes.ARMOR, 8.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.85D)
+            .add(Attributes.MOVEMENT_SPEED, 0.34D).add(Attributes.FOLLOW_RANGE, 64.0D).build());
     }
 
     @SubscribeEvent

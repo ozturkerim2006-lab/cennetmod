@@ -31,11 +31,6 @@ public class YeniMobRenderers {
                     return ResourceLocation.fromNamespaceAndPath("cennetmod", "textures/entity/siyah_figur.png");
                 }
             });
-        event.registerEntityRenderer(CennetMod.GOKSEL_MELEK.get(), ctx ->
-            new HumanoidMobRenderer<GokselMelekBoss, HumanoidModel<GokselMelekBoss>>(ctx, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER)), 0.7f) {
-                @Override public ResourceLocation getTextureLocation(GokselMelekBoss e) {
-                    return ResourceLocation.fromNamespaceAndPath("cennetmod", "textures/entity/goksel_melek.png");
-                }
-            });
+        event.registerEntityRenderer(CennetMod.GOKSEL_MELEK.get(), GokselMelekRenderer::new);
     }
 }

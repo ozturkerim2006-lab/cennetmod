@@ -50,8 +50,5 @@ public class CamurYaratigi extends Monster {
         return hit;
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
+
 }

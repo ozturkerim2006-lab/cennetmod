@@ -11,6 +11,15 @@
   "block.cennetmod.kutsal_sutun": "Kutsal Sütun",
   "block.cennetmod.nur_feneri": "Nur Feneri",
   "item.cennetmod.bati_sehri_giris_karti": "Batı Şehri Giriş Kartı",
-  "item.cennetmod.pegasus_bileti": "Pegasus Arabası Çağırma Bileti",
-  "item.cennetmod.zifiri_mesale": "Zifiri Bataklık Meşalesi"
+  "item.cennetmod.pegasus_bileti": "Pegasus Bileti",
+  "item.cennetmod.zifiri_mesale": "Zifiri Meşale",
+  "item.cennetmod.yildiz_kilici": "Yıldız Kılıcı",
+  "item.cennetmod.camur_yaratigi_spawn_egg": "Çamur Yaratığı Çağırma Yumurtası",
+  "item.cennetmod.agac_gozu_spawn_egg": "Ağaç Gözü Çağırma Yumurtası",
+  "item.cennetmod.siyah_figur_spawn_egg": "Siyah Figür Çağırma Yumurtası",
+  "item.cennetmod.goksel_melek_spawn_egg": "Göksel Melek Boss Çağırma Yumurtası",
+  "entity.cennetmod.camur_yaratigi": "Çamur Yaratığı",
+  "entity.cennetmod.agac_gozu": "Ağaç Gözü",
+  "entity.cennetmod.siyah_figur": "Siyah Figür",
+  "entity.cennetmod.goksel_melek": "Göksel Melek"
 }

@@ -1,4 +1,5 @@
 package com.cennetmod;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
@@ -106,7 +107,13 @@ public class CennetMod {
     }
 
     private void tabIcerigi(BuildCreativeModeTabContentsEvent e) {
-        if (e.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) { e.accept(YARIK_ASASI); e.accept(NUR_KARTI); }
+        if (e.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            e.accept(YARIK_ASASI); e.accept(NUR_KARTI); e.accept(BATI_KARTI); e.accept(PEGASUS_BILETI); e.accept(ZIFIRI_MESALE);
+        }
+        if (e.getTabKey() == CreativeModeTabs.COMBAT) { e.accept(YILDIZ_KILICI); }
+        if (e.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            e.accept(CAMUR_YARATIGI_YUMURTA); e.accept(AGAC_GOZU_YUMURTA); e.accept(SIYAH_FIGUR_YUMURTA); e.accept(GOKSEL_MELEK_YUMURTA);
+        }
         if (e.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             e.accept(KARANLIK_GOVDE_ITEM);
             e.accept(KARANLIK_YAPRAK_ITEM);

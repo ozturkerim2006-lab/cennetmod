@@ -516,7 +516,7 @@ public class NurSistemi {
          AngelSoldier var14 = null;
          double var15 = 0.9;
 
-         for(AngelSoldier var18 : var2) {
+         for(AngelSoldier var18 : (java.lang.Iterable<AngelSoldier>) var2) {
             double var19 = var18.getX() - var4.x;
             double var21 = var18.getY() + 1.35 - var4.y;
             double var23 = var18.getZ() - var4.z;
@@ -664,7 +664,7 @@ public class NurSistemi {
       if (var26 <= (double)420.0F) {
          List var14 = var0.getEntitiesOfClass(Mob.class, var1.getBoundingBox().inflate((double)72.0F), (var0x) -> !(var0x instanceof AngelSoldier) && var0x.isAlive());
          if (var14 != null) {
-            for(Mob var30 : var14) {
+            for(Mob var30 : (java.lang.Iterable<Mob>) var14) {
                double var32 = var30.getX() - (double)-2000.0F;
                double var19 = var30.getZ() - (double)0.0F;
                if (var32 * var32 + var19 * var19 <= (double)145924.0F) {
@@ -780,7 +780,7 @@ public class NurSistemi {
       List var10 = var0.getEntitiesOfClass(Mob.class, var1.getBoundingBox().inflate((double)56.0F), (var0x) -> !(var0x instanceof AngelSoldier) && var0x.isAlive());
       int var11 = var10 == null ? 0 : var10.size();
       if (var1.tickCount - var9 > 80 && var1.tickCount - var9 < 440 && var11 > 0 && var11 <= 3) {
-         for(Mob var31 : var10) {
+         for(Mob var31 : (java.lang.Iterable<Mob>) var10) {
             var31.discard();
          }
 
@@ -1232,7 +1232,7 @@ public class NurSistemi {
             if (var37 != null && !var37.isEmpty()) {
                double var16 = Double.MAX_VALUE;
 
-               for(AngelSoldier var19 : var37) {
+               for(AngelSoldier var19 : (java.lang.Iterable<AngelSoldier>) var37) {
                   double var20 = var1.distanceToSqr(var19.getX(), var19.getY(), var19.getZ());
                   if (var20 < var16) {
                      var16 = var20;

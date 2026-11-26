@@ -174,7 +174,7 @@ public class AngelSoldier extends Mob {
                         ServerLevel var5 = (ServerLevel)this.level();
                         List var6 = var5.getEntitiesOfClass(AngelSoldier.class, this.getBoundingBox().inflate((double)28.0F), (var0) -> var0.getRol() == 40);
                         if (var6 != null) {
-                           for(AngelSoldier var8 : var6) {
+                           for(AngelSoldier var8 : (java.lang.Iterable<AngelSoldier>) var6) {
                               var8.kizdir(var4);
                            }
                         }
@@ -675,7 +675,7 @@ public class AngelSoldier extends Mob {
                      List var53 = var1.getEntitiesOfClass(Mob.class, this.getBoundingBox().inflate((double)38.0F), (var0) -> !(var0 instanceof AngelSoldier) && var0.isAlive());
                      double var10 = Double.MAX_VALUE;
                      if (var53 != null) {
-                        for(Mob var13 : var53) {
+                        for(Mob var13 : (java.lang.Iterable<Mob>) var53) {
                            double var14 = var13.distanceToSqr(this.getX(), this.getY(), this.getZ());
                            if (var14 < var10) {
                               var10 = var14;
@@ -1535,7 +1535,7 @@ public class AngelSoldier extends Mob {
       } else {
          List var2 = var0.getEntitiesOfClass(AngelSoldier.class, var1.getBoundingBox().inflate((double)250.0F), (var1x) -> (var1x.getRol() == 50 || var1x.getPoz() >= 50 && var1x.getPoz() < 60) && (var1.getUUID().equals(var1x.oyuncu) || !var1x.isVehicle()));
          if (var2 != null) {
-            for(AngelSoldier var4 : var2) {
+            for(AngelSoldier var4 : (java.lang.Iterable<AngelSoldier>) var2) {
                var4.discard();
             }
          }
@@ -1603,7 +1603,7 @@ public class AngelSoldier extends Mob {
 
          List var10 = var1.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate((double)5.5F), (var1x) -> var1x != var2 && var1x.isAlive() && !var1x.isPassenger());
          if (var10 != null) {
-            for(ServerPlayer var12 : var10) {
+            for(ServerPlayer var12 : (java.lang.Iterable<ServerPlayer>) var10) {
                if (this.getPassengers().size() < 4) {
                   var12.startRiding(this, true);
                }
@@ -1781,7 +1781,7 @@ public class AngelSoldier extends Mob {
                      if (this.pegasusTick > 20 && this.getPassengers().size() < 4) {
                         List var43 = var1.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(2.6), (var0) -> var0.isAlive() && !var0.isPassenger());
                         if (var43 != null) {
-                           for(ServerPlayer var48 : var43) {
+                           for(ServerPlayer var48 : (java.lang.Iterable<ServerPlayer>) var43) {
                               if (this.getPassengers().size() < 4) {
                                  var48.startRiding(this, true);
                                  int var50 = Math.max(0, this.getPassengers().indexOf(var48));
@@ -1838,7 +1838,7 @@ public class AngelSoldier extends Mob {
                      ArrayList var53 = new ArrayList(this.getPassengers());
                      this.ejectPassengers();
 
-                     for(Entity var56 : var53) {
+                     for(Entity var56 : (java.lang.Iterable<Entity>) var53) {
                         if (var56 instanceof ServerPlayer) {
                            NurSistemi.zifiriBataklikBoyutunaGec((ServerPlayer)var56);
                         }
@@ -1866,7 +1866,7 @@ public class AngelSoldier extends Mob {
                         ArrayList var62 = new ArrayList(this.getPassengers());
                         this.ejectPassengers();
 
-                        for(Entity var63 : var62) {
+                        for(Entity var63 : (java.lang.Iterable<Entity>) var62) {
                            var63.fallDistance = 0.0F;
                            if (var63 instanceof ServerPlayer) {
                               ServerPlayer var22 = (ServerPlayer)var63;

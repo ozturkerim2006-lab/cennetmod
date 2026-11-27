@@ -286,7 +286,7 @@ public class OzelEfektSistemi {
         if (FX_LIST.isEmpty()) return;
 
         Vec3 cam = event.getCamera().getPosition();
-        PoseStack pose = event.getPoseStack();
+        PoseStack pose = new PoseStack();
         MultiBufferSource.BufferSource buf = mc.renderBuffers().bufferSource();
         VertexConsumer vc = buf.getBuffer(RenderType.lightning());
 

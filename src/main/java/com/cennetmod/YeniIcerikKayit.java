@@ -31,6 +31,7 @@ public class YeniIcerikKayit {
     public static void onTabs(BuildCreativeModeTabContentsEvent e) {
         if (e.getTabKey() == CreativeModeTabs.COMBAT) {
             e.accept(CennetMod.YILDIZ_KILICI.get());
+            e.accept(CennetMod.TWIN_KUSARIGAMA.get());
         }
         if (e.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             e.accept(CennetMod.CAMUR_YARATIGI_YUMURTA.get());

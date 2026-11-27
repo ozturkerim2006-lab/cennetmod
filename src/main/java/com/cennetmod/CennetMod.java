@@ -125,6 +125,7 @@ public class CennetMod {
       KARANLIK_YAPRAK_ITEM = ITEMS.register("karanlik_yaprak", () -> new BlockItem((Block)KARANLIK_YAPRAK.get(), new Item.Properties()));
       AY_CEVHERI_ITEM = ITEMS.register("ay_cevheri", () -> new BlockItem((Block)AY_CEVHERI.get(), new Item.Properties()));
       ZIFIRI_TAPINAK = FEATURES.register("zifiri_bataklik_tapinagi", () -> new ZifiriTapinakFeature(net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration.CODEC));
+      TWIN_KUSARIGAMA = ITEMS.register("twin_kusarigama", TwinKusarigama::new);
       YILDIZ_KILICI = ITEMS.register("yildiz_kilici", YildizKilici::new);
       CAMUR_YARATIGI = ENTITIES.register("camur_yaratigi", () -> EntityType.Builder.of(CamurYaratigi::new, MobCategory.MONSTER).sized(0.8F, 1.8F).build("camur_yaratigi"));
       AGAC_GOZU = ENTITIES.register("agac_gozu", () -> EntityType.Builder.of(AgacGozu::new, MobCategory.MONSTER).sized(1.0F, 1.0F).build("agac_gozu"));
@@ -137,6 +138,7 @@ public class CennetMod {
       MELEK = ENTITIES.register("melek_asker", () -> Builder.of(AngelSoldier::new, MobCategory.MISC).sized(1.8F, 6.0F).clientTrackingRange(10).build("melek_asker"));
    }
     public static RegistryObject<Feature<?>> ZIFIRI_TAPINAK;
+    public static RegistryObject<Item> TWIN_KUSARIGAMA;
     public static RegistryObject<Item> YILDIZ_KILICI;
     public static RegistryObject<EntityType<CamurYaratigi>> CAMUR_YARATIGI;
     public static RegistryObject<EntityType<AgacGozu>> AGAC_GOZU;

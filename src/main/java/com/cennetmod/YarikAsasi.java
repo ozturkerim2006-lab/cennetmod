@@ -66,9 +66,9 @@ public class YarikAsasi extends Item {
    }
 
    private static void baslikGonder(ServerPlayer serverPlayer, String string, String string2, ChatFormatting chatFormatting, int n, int n2, int n3) {
-      serverPlayer.connection.send(new ClientboundSetTitlesAnimationPacket(n, n2, n3));
-      serverPlayer.connection.send(new ClientboundSetSubtitleTextPacket(Component.literal(string2).withStyle(ChatFormatting.YELLOW)));
-      serverPlayer.connection.send(new ClientboundSetTitleTextPacket(Component.literal(string).withStyle(new ChatFormatting[]{chatFormatting, ChatFormatting.BOLD})));
+      {}
+      serverPlayer.sendSystemMessage(Component.literal(string2).withStyle(ChatFormatting.YELLOW));
+      serverPlayer.sendSystemMessage(Component.literal(string).withStyle(new ChatFormatting[]{chatFormatting, ChatFormatting.BOLD}));
    }
 
    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {

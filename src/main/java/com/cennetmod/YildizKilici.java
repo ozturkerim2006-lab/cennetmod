@@ -43,7 +43,7 @@ public class YildizKilici extends SwordItem {
     private static final String[] STIL_ACIKLAMA = {
         "Şimşek Atılımı & Gecikmeli Kesik",
         "Geniş Hilal Dalgaları & Ay Dalgası",
-        "Çekim Vuruşu & 2 sn Çelik Fırtına",
+        "Vücutla Dönüş + 85° Zırh Delen İndirme",
         "Alevli Ağır Darbe & Gökten İnen Yargı",
         "Uzun Delici Eskrim & 14 Blok Yıldız Işını",
         "Kristal Kalkan & Zaman Kırılması Kontrası",
@@ -141,8 +141,8 @@ public class YildizKilici extends SwordItem {
                 }
                 case 1 -> { if (finisher) target.hurt(sl.damageSources().magic(), 5.0F); }
                 case 2 -> {
-                    Vec3 pull = primary.position().subtract(target.position()).normalize().scale(0.3);
-                    target.setDeltaMovement(target.getDeltaMovement().add(pull.x, finisher ? 0.62 : 0.14, pull.z));
+                    Vec3 pull = primary.position().subtract(target.position()).normalize().scale(0.28);
+                    target.setDeltaMovement(target.getDeltaMovement().add(pull.x, finisher ? 0.55 : 0.12, pull.z));
                     target.hurtMarked = true;
                 }
                 case 3 -> {
@@ -222,11 +222,11 @@ public class YildizKilici extends SwordItem {
                 sl.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.4F, 0.65F);
                 player.getCooldowns().addCooldown(this, 32);
             }
-            case 2 -> {
-                st.whirlwindTicks = overdrive ? 55 : 40;
+            case 2 -> { // Kasirga Dansi: 1.2 sn vucutla donus + 85 derece zirh delen indirme!
+                st.whirlwindTicks = 36;
                 st.overdriveMult = mult;
-                sl.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.8F, 1.6F);
-                player.getCooldowns().addCooldown(this, 75);
+                sl.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.2F, 1.2F);
+                player.getCooldowns().addCooldown(this, 72);
             }
             case 3 -> {
                 player.setDeltaMovement(look.x * 0.9, 1.15, look.z * 0.9);
@@ -303,13 +303,43 @@ public class YildizKilici extends SwordItem {
             }
         }
 
+        // KASIRGA DANSI: 1. Faz (36..13) Vucutla donus -> 2. Faz (12) Sicrama -> 3. Faz (6) 85 Derece Zirh Delen Cat Diye Vurus!
         if (st.whirlwindTicks > 0) {
             st.whirlwindTicks--;
-            if (st.whirlwindTicks % 4 == 0) {
-                sl.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 0.7F, 1.3F);
-                for (LivingEntity e : sl.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(4.2), e -> e != player && e.isAlive())) {
+            player.fallDistance = 0;
+            if (st.whirlwindTicks >= 13) {
+                if (st.whirlwindTicks % 4 == 0) {
+                    sl.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 0.9F, 1.25F);
+                    for (LivingEntity e : sl.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(4.0, 2.0, 4.0), e -> e != player && e.isAlive())) {
+                        e.invulnerableTime = 0;
+                        e.hurt(sl.damageSources().playerAttack(player), 4.5F * st.overdriveMult);
+                        Vec3 pull = player.position().subtract(e.position()).normalize().scale(0.18);
+                        e.setDeltaMovement(e.getDeltaMovement().scale(0.6).add(pull.x, 0.05, pull.z));
+                        e.hurtMarked = true;
+                    }
+                }
+            } else if (st.whirlwindTicks == 12) {
+                Vec3 fwd = player.getLookAngle().multiply(1, 0, 1).normalize();
+                player.setDeltaMovement(fwd.x * 0.45, 0.52, fwd.z * 0.45);
+                player.hurtMarked = true;
+                sl.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.1F, 1.4F);
+            } else if (st.whirlwindTicks == 6) {
+                // 85 DERECE YUKARIDAN ASAGIYA ZIRH DINLEMEYEN BITIRICI DARBE!
+                Vec3 fwd = player.getLookAngle().multiply(1, 0, 1);
+                if (fwd.lengthSqr() < 1e-4) fwd = new Vec3(0, 0, 1);
+                fwd = fwd.normalize();
+                player.setDeltaMovement(fwd.x * 0.2, -0.95, fwd.z * 0.2);
+                player.hurtMarked = true;
+                Vec3 cleaveCenter = player.position().add(fwd.scale(2.8));
+                sl.playSound(null, cleaveCenter.x, cleaveCenter.y, cleaveCenter.z, SoundEvents.ANVIL_LAND, SoundSource.PLAYERS, 1.2F, 0.72F);
+                sl.playSound(null, cleaveCenter.x, cleaveCenter.y, cleaveCenter.z, SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1.4F, 0.8F);
+                sl.playSound(null, cleaveCenter.x, cleaveCenter.y, cleaveCenter.z, SoundEvents.TRIDENT_THUNDER.value(), SoundSource.PLAYERS, 0.85F, 1.35F);
+                for (LivingEntity e : sl.getEntitiesOfClass(LivingEntity.class, new AABB(cleaveCenter, cleaveCenter).inflate(3.4, 3.0, 3.4), e -> e != player && e.isAlive())) {
                     e.invulnerableTime = 0;
-                    e.hurt(sl.damageSources().playerAttack(player), 4.8F * st.overdriveMult);
+                    // Zirh ve kalkani tamamen yok sayan gercek kesik hasari (sonicBoom)
+                    e.hurt(sl.damageSources().sonicBoom(player), 24.0F * st.overdriveMult);
+                    e.setDeltaMovement(fwd.x * 0.65, -0.6, fwd.z * 0.65);
+                    e.hurtMarked = true;
                 }
             }
         }
@@ -371,7 +401,7 @@ public class YildizKilici extends SwordItem {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext ctx, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("§d✦ 7 Göksel Dövüş Stili & Özel 3D Efektler"));
+        tooltip.add(Component.literal("§d✦ 7 Göksel Dövüş Stili & Tam Vücut Animasyonları"));
         tooltip.add(Component.literal("§7Shift + Sağ Tık: §fStil Değiştir"));
         tooltip.add(Component.literal("§7Sağ Tık: §fÖzel Stil Yeteneği"));
         tooltip.add(Component.literal("§7Kombo 3-4 + Sağ Tık: §dOVERDRIVE (%150 Güç)"));

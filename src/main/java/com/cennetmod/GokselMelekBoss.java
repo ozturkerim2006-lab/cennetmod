@@ -144,11 +144,7 @@ public class GokselMelekBoss extends Monster {
             if (text != null && !text.isEmpty()) {
                 sp.sendSystemMessage(Component.literal(text));
             }
-            if (title != null || subtitle != null) {
-                sp.connection.send(new ClientboundSetTitlesAnimationPacket(6, 42, 12));
-                sp.connection.send(new ClientboundSetTitleTextPacket(Component.literal(title != null ? title : "")));
-                sp.connection.send(new ClientboundSetSubtitleTextPacket(Component.literal(subtitle != null ? subtitle : "")));
-            }
+            /* ekran basligi kapatildi - mesajlar sohbette */
         }
     }
 

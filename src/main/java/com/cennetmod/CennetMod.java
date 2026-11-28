@@ -130,7 +130,7 @@ public class CennetMod {
       CAMUR_YARATIGI = ENTITIES.register("camur_yaratigi", () -> EntityType.Builder.of(CamurYaratigi::new, MobCategory.MONSTER).sized(0.8F, 1.8F).build("camur_yaratigi"));
       AGAC_GOZU = ENTITIES.register("agac_gozu", () -> EntityType.Builder.of(AgacGozu::new, MobCategory.MONSTER).sized(1.0F, 1.0F).build("agac_gozu"));
       SIYAH_FIGUR = ENTITIES.register("siyah_figur", () -> EntityType.Builder.of(SiyahFigur::new, MobCategory.MONSTER).sized(0.6F, 2.0F).build("siyah_figur"));
-      GOKSEL_MELEK = ENTITIES.register("goksel_melek", () -> EntityType.Builder.of(GokselMelekBoss::new, MobCategory.MONSTER).sized(1.0F, 2.4F).build("goksel_melek"));
+      GOKSEL_MELEK = ENTITIES.register("goksel_melek", () -> EntityType.Builder.of(GokselMelekBoss::new, MobCategory.MONSTER).sized(1.3F, 3.4F).build("goksel_melek"));
       CAMUR_YARATIGI_YUMURTA = ITEMS.register("camur_yaratigi_spawn_egg", () -> new ForgeSpawnEggItem(CennetMod.CAMUR_YARATIGI, 0x3b2f2f, 0x6b4f3a, new Item.Properties()));
       AGAC_GOZU_YUMURTA = ITEMS.register("agac_gozu_spawn_egg", () -> new ForgeSpawnEggItem(CennetMod.AGAC_GOZU, 0x1b3b1b, 0xff2222, new Item.Properties()));
       SIYAH_FIGUR_YUMURTA = ITEMS.register("siyah_figur_spawn_egg", () -> new ForgeSpawnEggItem(CennetMod.SIYAH_FIGUR, 0x0a0a0a, 0x440066, new Item.Properties()));
